@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 echo "Updating permissions..."

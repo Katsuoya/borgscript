@@ -1,11 +1,11 @@
 #!/bin/bash
- 
+
 REPO="Katsuoya/borgscript"
 REPOACCESS=`cat ./.github-access`
- 
+
 [[ -z "$REPO" ]] && { echo "Error: No repo specified"; exit 1; }
 [[ -z "$REPOACCESS" ]] && { echo "Error: No repokey available"; exit 1; }
- 
+
 LATESTRELEASE=`curl --silent --user $REPOACCESS "https://api.github.com/repos/$REPO/releases/latest" |
   grep '"tag_name":' |
   sed -E 's/.*"([^"]+)".*/\1/'`
