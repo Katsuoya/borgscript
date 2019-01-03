@@ -1,13 +1,14 @@
 #!/bin/bash
 
-export BORG_REPO=`cat ./.borg-repo`
-export BORG_PASSCOMMAND="cat ./.borg-passphrase"
+DIR=$(cd `dirname $0` && pwd)
+export BORG_REPO=`cat $DIR/.borg-repo`
+export BORG_PASSPHRASE=`cat $DIR/.borg-passphrase`
 
 echo "###### Starting backup on $(date) ######"
 
 ## Create list of installed software
 echo "Create list of installed software ..."
-dpkg --get-selections > ./software.list
+dpkg --get-selections > $DIR/software.list
 RESULT=$?; if [[ ${RESULT} != 0 ]]; then
   echo "****************************************************"
   echo " Backup error => exit code: ${RESULT}"

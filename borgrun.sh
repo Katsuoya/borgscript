@@ -1,16 +1,17 @@
 ## Mailing
+DIR=$(cd `dirname $0` && pwd)
 HOSTSHORT=`hostname -s`
-MAILSENDER=$HOSTNAME"@"`cat ./.borg-domainname`
-MAILRECEIVER=`cat ./.borg-mailrecipient`
+MAILSENDER=$HOSTNAME"@"`cat $DIR/.borg-domainname`
+MAILRECEIVER=`cat $DIR/.borg-mailrecipient`
 HASERROR=0
 
 ## Logging
-LOG="./backup.log"
+LOG="$DIR/backup.log"
 exec > >(tee -i ${LOG})
 exec 2>&1
 
-[[ $HASERROR = 0 ]] && { ./borgupdate.sh; RESULT=$?; [[ ${RESULT} != 0 ]] && HASERROR=1; }
-[[ $HASERROR = 0 ]] && { ./borgbackup.sh; RESULT=$?; [[ ${RESULT} != 0 ]] && HASERROR=1; }
+[[ $HASERROR = 0 ]] && { $DIR/borgupdate.sh; RESULT=$?; [[ ${RESULT} != 0 ]] && HASERROR=1; }
+[[ $HASERROR = 0 ]] && { $DIR/borgbackup.sh; RESULT=$?; [[ ${RESULT} != 0 ]] && HASERROR=1; }
 
 ## Log for Httpsrequest
 if [ -d "/var/www/html/" ]; then

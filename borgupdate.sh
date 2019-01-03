@@ -1,7 +1,8 @@
 #!/bin/bash
 
+DIR=$(cd `dirname $0` && pwd)
 REPO="Katsuoya/borgscript"
-REPOACCESS=`cat ./.github-access`
+REPOACCESS=`cat $DIR/.github-access`
 
 [[ -z "$REPO" ]] && { echo "Error: No repo specified"; exit 1; }
 [[ -z "$REPOACCESS" ]] && { echo "Error: No repokey available"; exit 1; }
@@ -11,7 +12,7 @@ LATESTRELEASE=`curl --silent --user $REPOACCESS "https://api.github.com/repos/$R
   sed -E 's/.*"([^"]+)".*/\1/'`
 
 [[ -z "$LATESTRELEASE" ]] && { echo "Error: No release found"; exit 1; }
-[[ -e "./borgversion" ]] && { CURRVERSION=`cat ./borgversion`; }
+[[ -e "$DIR/.borgversion" ]] && { CURRVERSION=`cat $DIR/.borgversion`; }
 
 echo "Latest release is $LATESTRELEASE"
 echo "Local version is $CURRVERSION"
@@ -26,7 +27,7 @@ chmod 700 ./borgpostupdate.sh
 bash ./borgpostupdate.sh
 RESULT=$?; [[ ${RESULT} != 0 ]] && { echo "Error: Postupdate not possible"; exit 1; }
 
-echo $LATESTRELEASE &> ./borgversion
+echo $LATESTRELEASE &> $DIR/borgversion
 RESULT=$?; [[ ${RESULT} != 0 ]] && { echo "Error: Can not create version file"; exit 1; }
 
 echo "Update done."
