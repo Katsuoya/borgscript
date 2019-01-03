@@ -20,11 +20,11 @@ echo "Local version is $CURRVERSION"
 
 echo "Updating borg script..."
 
-curl -L "https://github.com/$REPO/tarball/$LATESTRELEASE" | tar xz --strip-components=1 --overwrite
+curl -L "https://github.com/$REPO/tarball/$LATESTRELEASE" | tar xz --strip-components=1 --overwrite -C $DIR
 RESULT=$?; [[ ${RESULT} != 0 ]] && { echo "Error: Download not possible"; exit 1; }
 
-chmod 700 ./borgpostupdate.sh
-bash ./borgpostupdate.sh
+chmod 700 $DIR/borgpostupdate.sh
+bash $DIR/borgpostupdate.sh
 RESULT=$?; [[ ${RESULT} != 0 ]] && { echo "Error: Postupdate not possible"; exit 1; }
 
 echo $LATESTRELEASE &> $DIR/borgversion
