@@ -2,7 +2,7 @@
 
 DIR=$(cd `dirname $0` && pwd)
 export BORG_REPO=`cat $DIR/.borg-repo`
-export BORG_PASSPHRASE=`cat $DIR/.borg-passphrase`
+export BORG_PASSCOMMAND="cat $DIR/.borg-passphrase"
 
 echo "###### Starting backup on $(date) ######"
 
