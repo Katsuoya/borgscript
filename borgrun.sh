@@ -38,7 +38,7 @@ echo
 startborg "$1" 2>&1 | tee "$LOG"
 
 echo
-echo "borg finished."
+echo "Borg finished."
 echo "------------------------------------------------------------------------------"
 
 exit 0

@@ -32,7 +32,7 @@ FOLDER[$i]="$DIR"
 [ -d "/var/www" ] && { i+=1; FOLDER[$i]="/var/www"; }
 
 echo
-echo "folders to backup:"
+echo "Folders to backup:"
 for i in ${!FOLDER[@]}; do
   echo "${FOLDER[$i]}"
 done
