@@ -1,27 +1,41 @@
 #!/bin/sh
 
-## Mailing
+startborg()
+{
+  #DIR=$(cd $(dirname $0) && pwd)
+  VERSION=$1
+  HOSTSHORT=$(hostname -s)
+  MAILSENDER=$HOSTSHORT"@"$(cat "$DIR/.borg-domainname")
+  MAILRECEIVER=$(cat "$DIR/.borg-mailrecipient")
+  HASERROR=0
+
+  [ $HASERROR = 0 ] && { "$DIR/borgupdate.sh" "$VERSION"; RESULT=$?; [ ${RESULT} != 0 ] && HASERROR=1; }
+  [ $HASERROR = 0 ] && { "$DIR/borgbackup.sh"; RESULT=$?; [ ${RESULT} != 0 ] && HASERROR=1; }
+
+  ## Log for Httpsrequest
+  if [ -d "/var/www/html/" ]; then
+    WSLOG="/var/www/html/backupstatus.log"
+    LOGDATE=$(date +%Y-%m-%d)
+    LOGTIME=$(date +%H-%M-%S)
+    [ $HASERROR = 1 ] && LOGSTATE="error" || LOGSTATE="success"
+    echo "{\"backup\":[{\"date\":\"${LOGDATE}\",\"time\":\"${LOGTIME}\",\"state\":\"${LOGSTATE}\"}]}" > $WSLOG
+  fi
+
+  ## Mail
+  [ $HASERROR = 0 ] && mailx -a "From: ${HOSTSHORT} Backup <$MAILSENDER>" -s "Backup | Success | ${HOSTSHORT}" $MAILRECEIVER < "$LOG"
+}
+
+####
+## MAIN
+####
 DIR=$(cd $(dirname $0) && pwd)
-HOSTSHORT=$(hostname -s)
-MAILSENDER=$HOSTSHORT"@"$(cat "$DIR/.borg-domainname")
-MAILRECEIVER=$(cat "$DIR/.borg-mailrecipient")
-HASERROR=0
-
-## Logging
 LOG="$DIR/backup.log"
-exec > "$LOG" 2>&1
 
-[ $HASERROR = 0 ] && { "$DIR/borgupdate.sh"; RESULT=$?; [ ${RESULT} != 0 ] && HASERROR=1; }
-[ $HASERROR = 0 ] && { "$DIR/borgbackup.sh"; RESULT=$?; [ ${RESULT} != 0 ] && HASERROR=1; }
+echo "Starting borg..."
+echo "Logging to $LOG"
+echo
 
-## Log for Httpsrequest
-if [ -d "/var/www/html/" ]; then
-  WSLOG="/var/www/html/backupstatus.log"
-  LOGDATE=$(date +%Y-%m-%d)
-  LOGTIME=$(date +%H-%M-%S)
-  [ $HASERROR = 1 ] && LOGSTATE="error" || LOGSTATE="success"
-  echo "{\"backup\":[{\"date\":\"${LOGDATE}\",\"time\":\"${LOGTIME}\",\"state\":\"${LOGSTATE}\"}]}" > $WSLOG
-fi
+startborg "$1" 2>&1 | tee "$LOG"
 
-## Mail
-[ $HASERROR = 0 ] && mailx -a "From: ${HOSTSHORT} Backup <$MAILSENDER>" -s "Backup | Success | ${HOSTSHORT}" $MAILRECEIVER < "$LOG"
+exit 0
+
