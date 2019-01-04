@@ -10,7 +10,7 @@ Install latest:
 Install release:
 
 1) Create new folder
-2) curl -L "https://github.com/Katsuoya/borgscript/tarball/v0.0.6" | tar xz --strip-components=1 --overwrite
+2) curl -L "https://github.com/Katsuoya/borgscript/tarball/v0.0.7" | tar xz --strip-components=1 --overwrite
 3) chmod 700 borgrun.sh
 4) chmod 700 borgupdate.sh
 
