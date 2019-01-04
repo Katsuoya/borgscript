@@ -31,10 +31,10 @@ fi
 if [ $LATEST = 0 ]; then
   echo "Latest release is $LATESTRELEASE"
   echo "Local version is $CURRVERSION"
-  [ "$LATESTRELEASE" = "$CURRVERSION" ] && { echo "Latest version already exists"; exit 0; }
+  [ "$LATESTRELEASE" = "$CURRVERSION" ] && { echo "Latest version already exists"; echo; exit 0; }
+  echo
 fi
 
-echo
 echo "Current dir is $DIR"
 echo
 echo "Downloading..."
@@ -53,6 +53,7 @@ RESULT=$?; [ ${RESULT} != 0 ] && { echo "Error: Postupdate not possible"; exit 1
 
 echo "$LATESTRELEASE" > "$DIR/borgversion"
 RESULT=$?; [ ${RESULT} != 0 ] && { echo "Error: Can not create version file"; exit 1; }
+
 echo
 echo "Update done."
 echo "------------------------------------------------------------------------------"

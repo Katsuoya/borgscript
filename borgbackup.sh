@@ -62,5 +62,6 @@ RESULT=$?; if [ ${RESULT} != 0 ]; then
   exit 1
 fi
 
+echo
 echo "Finished backup on $(date)."
 echo "------------------------------------------------------------------------------"
