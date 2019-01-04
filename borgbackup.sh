@@ -47,8 +47,6 @@ RESULT=$?; if [ ${RESULT} != 0 ]; then
   exit 1
 fi
 
-exit 0
-
 ## Prune old backups
 echo
 echo "Prune old backups ..."
