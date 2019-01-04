@@ -5,14 +5,14 @@ Install latest:
 1) Create new folder
 2) curl -L "https://github.com/Katsuoya/borgscript/archive/master.tar.gz" | tar xz --strip-components=1 --overwrite
 3) chmod 700 borgrun.sh
-
+4) chmod 700 borgupdate.sh
 
 Install release:
 
 1) Create new folder
 2) curl -L "https://github.com/Katsuoya/borgscript/tarball/v0.0.6" | tar xz --strip-components=1 --overwrite
 3) chmod 700 borgrun.sh
-
+4) chmod 700 borgupdate.sh
 
 Required new files to create manuell:
 
