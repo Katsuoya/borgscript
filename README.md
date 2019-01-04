@@ -23,14 +23,19 @@ Required new files to create manuell:
 - .borg-passphrase -> passphrase to your borg repo
 
 
-Add to crontab:
+Add to crontab latest:
 
-1) crontab -e 
-2) 0 0 * * * bash /home/borgbackup/borgrun.sh > /dev/null 
-or 
-2) 0 0 * * * bash /home/borgbackup/borgrun.sh latest > /dev/null 
+- crontab -e 
+- 0 0 * * * bash /home/borgbackup/borgrun.sh latest > /dev/null 
+- sudo service cron reload
+
+Add to crontab release:
+
+- crontab -e 
+- 0 0 * * * bash /home/borgbackup/borgrun.sh > /dev/null 
+- sudo service cron reload
 
 
 Start manuell:
 
-1) bash borgrun.sh [latest]
+- bash borgrun.sh [latest]
