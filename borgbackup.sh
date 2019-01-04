@@ -1,9 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 DIR=$(cd "$(dirname $0)" && pwd)
 export BORG_REPO=$(cat "$DIR/.borg-repo")
-#export BORG_PASSCOMMAND=$(cat "$DIR/.borg-passphrase")
 export BORG_PASSPHRASE=$(cat "$DIR/.borg-passphrase")
+
+echo $BACKUP_TARGETS
 
 echo "------------------------------------------------------------------------------"
 echo "Starting backup on $(date)..."
@@ -20,25 +21,33 @@ RESULT=$?; if [ ${RESULT} != 0 ]; then
 fi
 
 ## Create database dumps
-echo
-echo "Creating database dumps ..."
-#/bin/bash /root/backup/dbdump.sh
+##echo
+##echo "Creating database dumps ..."
 
 ## Perform Backup
+FOLDER[$i]="$DIR"
+[ -d "/etc" ] && { i+=1; FOLDER[$i]="/etc"; }
+[ -d "/var/lib" ] &&  { i+=1; FOLDER[$i]="/var/lib"; }
+[ -d "/var/webmin" ] && { i+=1; FOLDER[$i]="/var/webmin"; }
+[ -d "/var/www" ] && { i+=1; FOLDER[$i]="/var/www"; }
+
+echo
+echo "folders to backup:"
+for i in ${!FOLDER[@]}; do
+  echo "${FOLDER[$i]}"
+done
+
 echo
 echo "Create backup ..."
-borg create -v --stats --compression lzma,6 ::'{hostname}-{now:%Y-%m-%d_%H-%M-%S}' \
-/home/borgbackup \
-/etc \
-/var/lib \
-/var/webmin \
-/var/www
+borg create -v --stats --compression lzma,6 ::'{hostname}-{now:%Y-%m-%d_%H-%M-%S}' ${FOLDER[@]}
 RESULT=$?; if [ ${RESULT} != 0 ]; then
   echo "****************************************************"
   echo " Backup error => exit code: ${RESULT}"
   echo "****************************************************"
   exit 1
 fi
+
+exit 0
 
 ## Prune old backups
 echo

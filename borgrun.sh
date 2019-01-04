@@ -1,8 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
 startborg()
 {
-  #DIR=$(cd $(dirname $0) && pwd)
   VERSION=$1
   HOSTSHORT=$(hostname -s)
   MAILSENDER=$HOSTSHORT"@"$(cat "$DIR/.borg-domainname")
