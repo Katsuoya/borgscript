@@ -31,11 +31,15 @@ startborg()
 DIR=$(cd $(dirname $0) && pwd)
 LOG="$DIR/backup.log"
 
+echo "------------------------------------------------------------------------------"
 echo "Starting borg..."
 echo "Logging to $LOG"
 echo
 
 startborg "$1" 2>&1 | tee "$LOG"
 
-exit 0
+echo
+echo "borg finished."
+echo "------------------------------------------------------------------------------"
 
+exit 0
