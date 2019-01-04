@@ -1,15 +1,16 @@
-#!/bin/bash
+#!/bin/sh
 
-DIR=$(cd `dirname $0` && pwd)
-export BORG_REPO=`cat $DIR/.borg-repo`
-export BORG_PASSCOMMAND="cat $DIR/.borg-passphrase"
+DIR=$(cd "$(dirname $0)" && pwd)
+export BORG_REPO=$(cat "$DIR/.borg-repo")
+#export BORG_PASSCOMMAND=$(cat "$DIR/.borg-passphrase")
+export BORG_PASSPHRASE=$(cat "$DIR/.borg-passphrase")
 
 echo "###### Starting backup on $(date) ######"
 
 ## Create list of installed software
 echo "Create list of installed software ..."
-dpkg --get-selections > $DIR/software.list
-RESULT=$?; if [[ ${RESULT} != 0 ]]; then
+dpkg --get-selections > "$DIR/software.list"
+RESULT=$?; if [ ${RESULT} != 0 ]; then
   echo "****************************************************"
   echo " Backup error => exit code: ${RESULT}"
   echo "****************************************************"
@@ -28,7 +29,7 @@ borg create -v --stats --compression lzma,6 ::'{hostname}-{now:%Y-%m-%d_%H-%M-%S
 /var/lib \
 /var/webmin \
 /var/www
-RESULT=$?; if [[ ${RESULT} != 0 ]]; then
+RESULT=$?; if [ ${RESULT} != 0 ]; then
   echo "****************************************************"
   echo " Backup error => exit code: ${RESULT}"
   echo "****************************************************"
@@ -38,7 +39,7 @@ fi
 ## Prune old backups
 echo "Prune old backups ..."
 borg prune -v --list --keep-daily=7 --keep-weekly=4 --keep-monthly=6
-RESULT=$?; if [[ ${RESULT} != 0 ]]; then
+RESULT=$?; if [ ${RESULT} != 0 ]; then
   echo "****************************************************"
   echo " Backup error => exit code: ${RESULT}"
   echo "****************************************************"
@@ -48,7 +49,7 @@ fi
 ## Stats
 echo "Repository stats..."
 borg info
-RESULT=$?; if [[ ${RESULT} != 0 ]]; then
+RESULT=$?; if [ ${RESULT} != 0 ]; then
   echo "****************************************************"
   echo " Backup error => exit code: ${RESULT}"
   echo "****************************************************"
