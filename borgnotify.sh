@@ -1,5 +1,6 @@
 #!/bin/bash
 
+DIR=$(cd "$(dirname $0)" && pwd)
 HOSTSHORT=$(hostname -s)
 MAILSENDER=$HOSTSHORT"@"$(cat "$DIR/.borg-domainname")
 MAILRECEIVER=$(cat "$DIR/.borg-mailrecipient")
