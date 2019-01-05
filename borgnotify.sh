@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 HOSTSHORT=$(hostname -s)
 MAILSENDER=$HOSTSHORT"@"$(cat "$DIR/.borg-domainname")
