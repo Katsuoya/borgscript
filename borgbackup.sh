@@ -26,6 +26,7 @@ fi
 
 ## Perform Backup
 FOLDER[$i]="$DIR"
+[ -d "/home" ] && { i+=1; FOLDER[$i]="/home"; }
 [ -d "/etc" ] && { i+=1; FOLDER[$i]="/etc"; }
 [ -d "/var/lib" ] &&  { i+=1; FOLDER[$i]="/var/lib"; }
 [ -d "/var/webmin" ] && { i+=1; FOLDER[$i]="/var/webmin"; }
