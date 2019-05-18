@@ -1,6 +1,8 @@
 #!/bin/bash
 
 DIR=$(cd "$(dirname $0)" && pwd)
+MNTFILE="$DIR/.borg-mntconfig"
+
 export BORG_REPO=$(cat "$DIR/.borg-repo")
 export BORG_PASSPHRASE=$(cat "$DIR/.borg-passphrase")
 
@@ -8,6 +10,22 @@ echo $BACKUP_TARGETS
 
 echo "------------------------------------------------------------------------------"
 echo "Starting backup on $(date)..."
+
+## Mount drive
+if [ -f "$MNTFILE" ]; then
+  echo
+  echo "Mount backupdrive"
+
+  source "$MNTFILE"
+
+  [ ! -d "$MNTPOINT" ] && { mkdir $MNTPOINT; }
+  if ! mountpoint -q $MNTPOINT; then
+    echo "Mount $MNTPOINT"
+    mount.nfs $MNTSHARE $MNTPOINT
+  fi
+
+  export BORG_REPO="$MNTPOINT/"$(cat "$DIR/.borg-repo")
+fi
 
 ## Create list of installed software
 echo
@@ -27,6 +45,7 @@ fi
 ## Perform Backup
 FOLDER[$i]="$DIR"
 [ -d "/home" ] && { i+=1; FOLDER[$i]="/home"; }
+[ -d "/root/dockerdata" ] && { i+=1; FOLDER[$i]="/root/dockerdata"; }
 [ -d "/etc" ] && { i+=1; FOLDER[$i]="/etc"; }
 [ -d "/var/lib" ] &&  { i+=1; FOLDER[$i]="/var/lib"; }
 [ -d "/var/webmin" ] && { i+=1; FOLDER[$i]="/var/webmin"; }
@@ -68,6 +87,14 @@ RESULT=$?; if [ ${RESULT} != 0 ]; then
   echo " Backup error => exit code: ${RESULT}"
   echo "****************************************************"
   exit 1
+fi
+
+## Unmount backupdrive
+if [ -f "$MNTFILE" ]; then
+  if mountpoint -q $MNTPOINT; then
+    echo "Unmount $MNTPOINT"
+    umount $MNTPOINT
+  fi
 fi
 
 echo
