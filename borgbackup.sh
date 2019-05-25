@@ -21,7 +21,7 @@ if [ -f "$MNTFILE" ]; then
   [ ! -d "$MNTPOINT" ] && { mkdir $MNTPOINT; }
   if ! mountpoint -q $MNTPOINT; then
     echo "Mount $MNTPOINT"
-    mount.nfs $MNTSHARE $MNTPOINT
+    /bin/mount.nfs $MNTSHARE $MNTPOINT
   fi
 
   export BORG_REPO="$MNTPOINT/"$(cat "$DIR/.borg-repo")
@@ -93,7 +93,7 @@ fi
 if [ -f "$MNTFILE" ]; then
   if mountpoint -q $MNTPOINT; then
     echo "Unmount $MNTPOINT"
-    umount $MNTPOINT
+    /bin/umount $MNTPOINT
   fi
 fi
 
