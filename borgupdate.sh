@@ -11,7 +11,7 @@ if [ "$1" != "" ]; then
 fi
 
 DIR=$(cd $(dirname $0) && pwd)
-REPO="Katsuoya/borgscript"
+REPO="sbr1nkmann/borgscript"
 REPOACCESS=$(cat "$DIR/.github-access")
 
 [ -z "$REPO" ] && { echo "Error: No repo specified"; exit 1; }
